@@ -1,10 +1,9 @@
 FROM huynda/base:yoga
-MAINTAINER huynda.cloudops@gmail.com
+LABEL maintainer="huynda.cloudops@gmail.com"
 
-RUN apt upgrade -y nova-api nova-conductor nova-novncproxy nova-scheduler; apt autoremove -y
+RUN apt update; apt install -y nova-api nova-conductor nova-novncproxy nova-scheduler
 
 COPY etc/nova.conf /etc/nova/nova.conf
-RUN chown root:nova /etc/nova/nova.conf
 
 #copy config script
 COPY  scripts/* /home/

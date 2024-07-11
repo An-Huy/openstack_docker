@@ -4,12 +4,12 @@
 API_DATABASE_NAME=${API_DATABASE_NAME:-nova_api}
 API_DATABASE_USER=${API_DATABASE_USER:-nova_api}
 API_DATABASE_PASS=${API_DATABASE_PASS}
-API_DATABASE_HOST=${API_DATABASE_HOST:-$HOST_IP}
+API_DATABASE_HOST=${API_DATABASE_HOST:-$DATABASE_HOST}
 
 CELL1_DATABASE_NAME=${CELL1_DATABASE_NAME:-nova_cell1}
 CELL1_DATABASE_USER=${CELL1_DATABASE_USER:-nova_cell1}
 CELL1_DATABASE_PASS=${CELL1_DATABASE_PASS}
-CELL1_DATABASE_HOST=${CELL1_DATABASE_HOST:-$HOST_IP}
+CELL1_DATABASE_HOST=${CELL1_DATABASE_HOST:-$DATABASE_HOST}
 
 ## service
 DOMAIN_NAME=${DOMAIN_NAME:-Default}
@@ -23,14 +23,14 @@ PLACEMENT_PASS=${PLACEMENT_PASS}
 ## neutron
 NEUTRON_USER=${NEUTRON_USER:-neutron}
 NEUTRON_PASS=${NEUTRON_PASS}
-METADATA_SECRET=${METADATA_SECRET}
+METADATA_SECRET=${METADATA_PROXY_SHARED_SECRET}
 
 HOSTNAME=${NODE_NAME:-$HOSTNAME}
 REGION_NAME=${REGION_NAME:-RegionOne}
 
 # IP and Domain
 PROTOCOL=${PROTOCOL:-http}
-MEMCACHED_HOST=${MEMCACHED_HOST:-$HOST_IP}
+MEMCACHED_HOST=${MEMCACHED_HOST:-$MEMCACHED_HOST}
 
 RAM_FILTER=${RAM_FILTER}
 CPU_FILTER=${CPU_FILTER}
@@ -39,7 +39,7 @@ CONF_FILE=/etc/nova/nova.conf
 
 echo "Congfigure nova-api"
 crudini --set $CONF_FILE DEFAULT transport_url $TRANSPORT_URL
-crudini --set $CONF_FILE DEFAULT my_ip $HOST_IP
+crudini --set $CONF_FILE DEFAULT my_ip $CONTROLLER_IP
 crudini --set $CONF_FILE DEFAULT host $HOSTNAME
 
 crudini --set $CONF_FILE api_database \
@@ -54,14 +54,14 @@ crudini --set $CONF_FILE filter_scheduler ram_weight_multiplier $RAM_FILTER
 crudini --set $CONF_FILE filter_scheduler cpu_weight_multiplier $CPU_FILTER
 
 crudini --set $CONF_FILE glance \
-    api_servers $PROTOCOL://$HOST_IP:9292
+    api_servers $PROTOCOL://$CONTROLLER_IP:9292
 
 crudini --set $CONF_FILE keystone_authtoken service_token_roles $PROJECT_NAME
 crudini --set $CONF_FILE keystone_authtoken service_token_roles_required True
 crudini --set $CONF_FILE keystone_authtoken \
-    www_authenticate_uri $PROTOCOL://$HOST_IP:5000/
+    www_authenticate_uri $PROTOCOL://$CONTROLLER_IP:5000/
 crudini --set $CONF_FILE keystone_authtoken \
-    auth_url $PROTOCOL://$HOST_IP:5000/
+    auth_url $PROTOCOL://$CONTROLLER_IP:5000/
 crudini --set $CONF_FILE keystone_authtoken \
     memcached_servers $MEMCACHED_HOST:11211
 crudini --set $CONF_FILE keystone_authtoken auth_type password
@@ -72,7 +72,7 @@ crudini --set $CONF_FILE keystone_authtoken username $NOVA_USER
 crudini --set $CONF_FILE keystone_authtoken password $NOVA_PASS
 
 crudini --set $CONF_FILE neutron \
-    auth_url $PROTOCOL://$HOST_IP:5000
+    auth_url $PROTOCOL://$CONTROLLER_IP:5000
 crudini --set $CONF_FILE neutron auth_type password
 crudini --set $CONF_FILE neutron project_domain_name $DOMAIN_NAME
 crudini --set $CONF_FILE neutron user_domain_name $DOMAIN_NAME
@@ -90,13 +90,13 @@ crudini --set $CONF_FILE placement project_name $PROJECT_NAME
 crudini --set $CONF_FILE placement auth_type password
 crudini --set $CONF_FILE placement user_domain_name $DOMAIN_NAME
 crudini --set $CONF_FILE placement \
-    auth_url $PROTOCOL://$HOST_IP:5000/v3
+    auth_url $PROTOCOL://$CONTROLLER_IP:5000/v3
 crudini --set $CONF_FILE placement username $PLACEMENT_USER
 crudini --set $CONF_FILE placement password $PLACEMENT_PASS
 
 crudini --set $CONF_FILE service_user send_service_user_token True
 crudini --set $CONF_FILE service_user \
-    auth_url $PROTOCOL://$HOST_IP:5000/identity
+    auth_url $PROTOCOL://$CONTROLLER_IP:5000/identity
 crudini --set $CONF_FILE service_user auth_strategy keystone
 crudini --set $CONF_FILE service_user auth_type password
 crudini --set $CONF_FILE service_user project_domain_name $DOMAIN_NAME

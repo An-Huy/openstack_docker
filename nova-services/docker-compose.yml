@@ -1,0 +1,110 @@
+version: "3.5"
+services:
+  nova-api:
+    container_name: openstack_nova-api
+    image: huynda/openstack_nova-services:yoga
+    privileged: true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/log/nova:/var/log/nova
+    ports:
+      - 10.0.0.1:8774:8774
+      - 10.0.0.1:8775:8775
+    environment:
+      PROCESS: api
+      PROTOCOL: http
+      CPU_FILTER: 1.0
+      RAM_FILTER: 1.0
+      CONTROLLER_IP: 10.0.0.1
+      DATABASE_HOST: 10.0.0.1
+      MEMCACHED_HOST: 10.0.0.1
+      NODE_NAME: ops-huynda-controller
+      TRANSPORT_URL: rabbit://openstack:XXXXXXXXXXXXXXXXXXXXXX@10.0.0.1
+      API_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      CELL0_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      CELL1_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      PLACEMENT_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NOVA_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NEUTRON_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      METADATA_SECRET: XXXXXXXXXXXXXXXXXXXXXX
+      REGION_NAME: RegionOne
+    restart: always
+
+  nova-scheduler:
+    container_name: openstack_nova-scheduler
+    image: huynda/openstack_nova-services:yoga
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/log/nova:/var/log/nova
+    environment:
+      PROCESS: scheduler
+      PROTOCOL: http
+      CPU_FILTER: 1.0
+      RAM_FILTER: 1.0
+      CONTROLLER_IP: 10.0.0.1
+      DATABASE_HOST: 10.0.0.1
+      MEMCACHED_HOST: 10.0.0.1
+      NODE_NAME: ops-huynda-controller
+      TRANSPORT_URL: rabbit://openstack:XXXXXXXXXXXXXXXXXXXXXX@10.0.0.1
+      API_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      CELL0_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      CELL1_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      PLACEMENT_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NOVA_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NEUTRON_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      METADATA_SECRET: XXXXXXXXXXXXXXXXXXXXXX
+      REGION_NAME: RegionOne
+    restart: always
+
+nova-conductor:
+    container_name: openstack_nova-conductor
+    image: huynda/openstack_nova-services:yoga
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/log/nova:/var/log/nova
+    environment:
+      PROCESS: conductor
+      PROTOCOL: http
+      CPU_FILTER: 1.0
+      RAM_FILTER: 1.0
+      CONTROLLER_IP: 10.0.0.1
+      DATABASE_HOST: 10.0.0.1
+      MEMCACHED_HOST: 10.0.0.1
+      NODE_NAME: ops-huynda-controller
+      TRANSPORT_URL: rabbit://openstack:XXXXXXXXXXXXXXXXXXXXXX@10.0.0.1
+      API_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      CELL1_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      PLACEMENT_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NOVA_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NEUTRON_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      METADATA_SECRET: XXXXXXXXXXXXXXXXXXXXXX
+      REGION_NAME: RegionOne
+    restart: always
+
+  nova-novncproxy:
+    container_name: openstack_nova-novncproxy
+    image: huynda/openstack_nova-services:yoga
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/log/nova:/var/log/nova
+    ports:
+      - 10.0.0.1:6080:6080
+    environment:s
+      PROCESS: novncproxy
+      PROTOCOL: http
+      CPU_FILTER: 1.0
+      RAM_FILTER: 1.0
+      CONTROLLER_IP: 10.0.0.1
+      DATABASE_HOST: 10.0.0.1
+      MEMCACHED_HOST: 10.0.0.1
+      NODE_NAME: ops-huynda-controller
+      TRANSPORT_URL: rabbit://openstack:XXXXXXXXXXXXXXXXXXXXXX@10.0.0.1
+      API_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      CELL1_DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      PLACEMENT_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NOVA_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      NEUTRON_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      METADATA_SECRET: XXXXXXXXXXXXXXXXXXXXXX
+      REGION_NAME: RegionOne
+    restart: always
+
