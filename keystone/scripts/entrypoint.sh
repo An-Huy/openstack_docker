@@ -3,7 +3,7 @@
 echo "sync db and create fernet token"
 	keystone-manage db_sync
 echo "Config apache"
-	echo "ServerName " $HOST_IP >> /etc/apache2/apache2.conf
+	echo "ServerName " $CONTROLLER_IP >> /etc/apache2/apache2.conf
 echo "bootstrap keystone"
 	./bootstrap.sh
 echo "[i] Starting daemon..."

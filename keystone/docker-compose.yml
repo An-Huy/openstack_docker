@@ -1,0 +1,20 @@
+version: "3.5"
+services:
+  keystone:
+    container_name: openstack_keystone
+    image: huynda/openstack_keystone:yoga
+    ports:
+      - 10.0.0.1:5000:5000
+    dns:
+      - 8.8.8.8
+    environment:
+      CONTROLLER_IP: 10.0.0.1
+      DATABASE_HOST: 10.0.0.1
+      DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      ADMIN_PASSWORD: XXXXXXXXXXXXXXXXXXXXXX
+      TOKEN_EXPIRE: 28800
+      REGION_NAME: RegionOne
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/log/apache2:/var/log/apache2
+    restart: always

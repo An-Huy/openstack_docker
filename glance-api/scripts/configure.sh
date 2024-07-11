@@ -4,7 +4,7 @@
 DATABASE_NAME=${DATABASE_NAME:-glance}
 DATABASE_USER=${DATABASE_USER:-glance}
 DATABASE_PASS=${DATABASE_PASS}
-DATABASE_HOST=${DATABASE_HOST:-$HOST_IP}
+DATABASE_HOST=${DATABASE_HOST:-$DATABASE_HOST}
 
 ## service
 DOMAIN_NAME=${DOMAIN_NAME:-Default}
@@ -14,7 +14,7 @@ GLANCE_PASS=${GLANCE_PASS}
 
 # IP and Domain
 PROTOCOL=${PROTOCOL:-http}
-MEMCACHED_HOST=${MEMCACHED_HOST:-$HOST_IP}
+MEMCACHED_HOST=${MEMCACHED_HOST:-$MEMCACHED_HOST}
 
 #Glance stores
 GLANCE_STORE=${GLANCE_STORE:-file,http}
@@ -29,9 +29,9 @@ crudini --set $CONF_FILE database \
     connection mysql+pymysql://$DATABASE_USER:$DATABASE_PASS@$DATABASE_HOST/$DATABASE_NAME
 
 crudini --set $CONF_FILE keystone_authtoken \
-    www_authenticate_uri $PROTOCOL://$HOST_IP:5000
+    www_authenticate_uri $PROTOCOL://$CONTROLLER_IP:5000
 crudini --set $CONF_FILE keystone_authtoken \
-    auth_url $PROTOCOL://$HOST_IP:5000
+    auth_url $PROTOCOL://$CONTROLLER_IP:5000
 crudini --set $CONF_FILE keystone_authtoken \
     memcached_servers $MEMCACHED_HOST:11211
 

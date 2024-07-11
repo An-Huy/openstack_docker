@@ -1,4 +1,5 @@
 FROM huynda/base:yoga
-MAINTAINER huynda.cloudops@gmail.com
+LABEL maintainer="huynda.cloudops@gmail.com"
 
-RUN apt install -y nova-compute nfs-common; apt autoremove -y
+# NOTE: edit this if you use different type of storage like CEPH, ISCSI, ...
+RUN apt install -y nova-compute nfs-common

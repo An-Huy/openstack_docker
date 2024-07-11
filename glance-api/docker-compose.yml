@@ -1,0 +1,21 @@
+version: "3.5"
+services:
+  glance-api:
+    container_name: openstack_glance-api
+    image: huynda/openstack_glance-api:yoga
+    privileged: true
+    ports:
+      - 10.0.0.1:9292:9292
+    environment:
+      PROCESS: api
+      PROTOCOL: http
+      CONTROLLER_IP: 10.0.0.1
+      DATABASE_HOST: 10.0.0.1
+      MEMCACHED_HOST: 10.0.0.1
+      TRANSPORT_URL: rabbit://openstack:XXXXXXXXXXXXXXXXXXXXXX@10.0.0.1
+      DATABASE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+      GLANCE_PASS: XXXXXXXXXXXXXXXXXXXXXX
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/log/glance:/var/log/glance
+    restart: always
